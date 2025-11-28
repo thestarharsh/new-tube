@@ -29,5 +29,3 @@ It uses the latest web technologies and a production-grade architecture.
 - Likes, comments, subscriptions (coming soon)  
 - Creator dashboard  
 - Trending & categories (future)
-## 📁 Project Structure
-
