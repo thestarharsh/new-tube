@@ -2,6 +2,7 @@
 
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { useRouter } from "next/navigation";
 
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
@@ -14,7 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
+
+import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 
 const VideosSectionSuspense = () => {
   const router = useRouter();
@@ -32,7 +34,7 @@ const VideosSectionSuspense = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[510px] pl-6">Video</TableHead>
+              <TableHead className="w-127.5 pl-6">Video</TableHead>
               <TableHead>Visibility</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
@@ -64,7 +66,13 @@ const VideosSectionSuspense = () => {
                     onClick={handleNavigate}
                     onKeyDown={handleKeyDown}
                   >
-                    <TableCell>{video?.title}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        <div className="relative aspect-video w-36 shrink-0">
+                          <VideoThumbnail />
+                        </div>
+                      </div>
+                    </TableCell>
                     <TableCell>Visible</TableCell>
                     <TableCell>Status</TableCell>
                     <TableCell>Published</TableCell>
