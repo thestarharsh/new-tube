@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import {
   VideoAssetCreatedWebhookEvent,
+  VideoAssetDeletedWebhookEvent,
   VideoAssetErroredWebhookEvent,
   VideoAssetReadyWebhookEvent,
   VideoAssetTrackReadyWebhookEvent,
@@ -15,6 +16,7 @@ const SIGNING_SECRET = process.env.MUX_WEBHOOK_SECRET!;
 
 type WebhookEvent =
   | VideoAssetCreatedWebhookEvent
+  | VideoAssetDeletedWebhookEvent
   | VideoAssetErroredWebhookEvent
   | VideoAssetReadyWebhookEvent
   | VideoAssetTrackReadyWebhookEvent;
@@ -46,8 +48,10 @@ export const POST = async (req: Request) => {
     case "video.asset.created": {
       const data = payload.data as VideoAssetCreatedWebhookEvent["data"];
       if (!data.upload_id) {
-        throw new Response("No Upload ID is found", { status: 400 });
+        return new Response("No Upload ID is found", { status: 400 });
       }
+
+      console.log("Creating Video with Upload ID:", data.upload_id);
 
       await db
         .update(videos)
@@ -56,6 +60,95 @@ export const POST = async (req: Request) => {
           muxStatus: data.status,
         })
         .where(eq(videos.muxUploadId, data.upload_id));
+      break;
+    }
+    case "video.asset.ready": {
+      const data = payload.data as VideoAssetReadyWebhookEvent["data"];
+
+      if (!data.upload_id) {
+        return new Response("No Upload ID is found", { status: 400 });
+      }
+
+      const playbackId = data.playback_ids?.[0]?.id;
+      if (!playbackId) {
+        return new Response("No Playback ID is found", { status: 400 });
+      }
+
+      const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`;
+      const previewUrl = `https://image.mux.com/${playbackId}/animated.gif`;
+
+      const duration = data?.duration ? Math.round(data.duration * 1000) : 0;
+
+      console.log("Updating Video with Upload ID:", data.upload_id);
+
+      await db
+        .update(videos)
+        .set({
+          muxStatus: data.status,
+          muxPlaybackId: playbackId,
+          muxAssetId: data.id,
+          thumbnailUrl,
+          previewUrl,
+          duration,
+        })
+        .where(eq(videos.muxUploadId, data.upload_id));
+      break;
+    }
+
+    case "video.asset.errored": {
+      const data = payload.data as VideoAssetErroredWebhookEvent["data"];
+
+      if (!data.upload_id) {
+        return new Response("No Upload ID is found", { status: 400 });
+      }
+
+      console.log("Error in Video with Upload ID:", data.upload_id);
+
+      await db
+        .update(videos)
+        .set({
+          muxStatus: data.status,
+        })
+        .where(eq(videos.muxUploadId, data.upload_id));
+      break;
+    }
+
+    case "video.asset.deleted": {
+      const data = payload.data as VideoAssetDeletedWebhookEvent["data"];
+
+      if (!data.upload_id) {
+        return new Response("No Upload ID is found", { status: 400 });
+      }
+
+      console.log("Deleting Video with Upload ID:", data.upload_id);
+
+      await db.delete(videos).where(eq(videos.muxUploadId, data.upload_id));
+      break;
+    }
+
+    case "video.asset.track.ready": {
+      const data = payload.data as VideoAssetTrackReadyWebhookEvent["data"] & {
+        asset_id: string;
+      };
+
+      // TS incorrectly infers that asset_id is present in the data
+      const assetId = data.asset_id;
+      const trackId = data.id;
+      const status = data.status;
+
+      if (!assetId) {
+        return new Response("No Asset ID is found", { status: 400 });
+      }
+
+      console.log("Track Ready in Video with Asset ID:", assetId);
+
+      await db
+        .update(videos)
+        .set({
+          muxTrackId: trackId,
+          muxTrackStatus: status,
+        })
+        .where(eq(videos.muxAssetId, assetId));
       break;
     }
   }
