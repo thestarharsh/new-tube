@@ -35,7 +35,7 @@ export const FilterCarousel = ({
   const count = useMemo(() => api?.scrollSnapList().length ?? 0, [api]);
   const derivedSelected = useMemo(
     () => (api ? api.selectedScrollSnap() + 1 : 0),
-    [api]
+    [api],
   );
 
   useEffect(() => {
@@ -71,8 +71,8 @@ export const FilterCarousel = ({
     <div className="relative w-full">
       <div
         className={cn(
-          "absolute left-8 top-0 bottom-0 w-12 z-10 bg-linear-to-r from-white to-transparent pointer-events-none",
-          (derivedSelected === 1 || current === 1) && "hidden"
+          "pointer-events-none absolute top-0 bottom-0 left-8 z-10 w-12 bg-linear-to-r from-white to-transparent",
+          (derivedSelected === 1 || current === 1) && "hidden",
         )}
       />
 
@@ -85,10 +85,13 @@ export const FilterCarousel = ({
         }}
       >
         <CarouselContent className="-ml-3" style={{ touchAction: "pan-y" }}>
-          <CarouselItem onClick={() => onSelect?.(null)} className="pl-3 basis-auto">
+          <CarouselItem
+            onClick={() => onSelect?.(null)}
+            className="basis-auto pl-3"
+          >
             <Badge
               variant={!value ? "default" : "secondary"}
-              className="rounded-lg px-3 py-1 cursor-pointer whitespace-nowrap text-sm select-none"
+              className="cursor-pointer rounded-lg px-3 py-1 text-sm whitespace-nowrap select-none"
             >
               All
             </Badge>
@@ -96,8 +99,8 @@ export const FilterCarousel = ({
 
           {isLoading &&
             Array.from({ length: 14 }).map((_, index) => (
-              <CarouselItem key={index} className="pl-3 basis-auto">
-                <Skeleton className="rounded-lg px-3 py-1 h-full text-sm w-[100px]">
+              <CarouselItem key={index} className="basis-auto pl-3">
+                <Skeleton className="h-full w-25 rounded-lg px-3 py-1 text-sm">
                   &nbsp;
                 </Skeleton>
               </CarouselItem>
@@ -108,11 +111,11 @@ export const FilterCarousel = ({
               <CarouselItem
                 onClick={() => onSelect?.(item.value)}
                 key={item.value}
-                className="pl-3 basis-auto"
+                className="basis-auto pl-3"
               >
                 <Badge
                   variant={value === item.value ? "default" : "secondary"}
-                  className="rounded-lg px-3 py-1 cursor-pointer whitespace-nowrap text-sm select-none"
+                  className="cursor-pointer rounded-lg px-3 py-1 text-sm whitespace-nowrap select-none"
                 >
                   {item.label}
                 </Badge>
@@ -126,8 +129,8 @@ export const FilterCarousel = ({
 
       <div
         className={cn(
-          "absolute right-8 top-0 bottom-0 w-12 z-10 bg-linear-to-l from-white to-transparent pointer-events-none",
-          current === count && "hidden"
+          "pointer-events-none absolute top-0 right-8 bottom-0 z-10 w-12 bg-linear-to-l from-white to-transparent",
+          current === count && "hidden",
         )}
       />
     </div>

@@ -8,19 +8,25 @@ import {
   CopyCheckIcon,
   CopyIcon,
   GlobeIcon,
+  ImagePlusIcon,
   LockIcon,
   MoreVerticalIcon,
+  RotateCcwIcon,
+  SparklesIcon,
   TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { trpc } from "@/trpc/client";
 import { snakeCaseToTitleCase } from "@/lib/utils";
+import { THUMBNAIL_FALLBACK } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { ConfirmationModal } from "@/components/confirmation-modal";
+import { ThumbnailUploadModal } from "@/components/thumbnail-upload-modal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,7 +61,8 @@ const FormSectionSuspence = ({ videoId }: FormSectionProps) => {
   const router = useRouter();
   const utils = trpc.useUtils();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isThumbnailOpen, setIsThumbnailOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
   const [video] = trpc.studio.getOne.useSuspenseQuery({ videoId });
@@ -93,7 +100,7 @@ const FormSectionSuspence = ({ videoId }: FormSectionProps) => {
   };
 
   const onDeleteVideo = () => {
-    setIsOpen(true);
+    setIsConfirmOpen(true);
   };
 
   const fullUrl = `${process.env.VERCEL_URL || "http://localhost:3000"}/videos/${videoId}`;
@@ -108,16 +115,21 @@ const FormSectionSuspence = ({ videoId }: FormSectionProps) => {
   return (
     <>
       <ConfirmationModal
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-        onCancel={() => setIsOpen(false)}
+        isOpen={isConfirmOpen}
+        onOpenChange={setIsConfirmOpen}
+        onCancel={() => setIsConfirmOpen(false)}
         onConfirm={() => {
           remove.mutate({ videoId });
-          setIsOpen(false);
+          setIsConfirmOpen(false);
         }}
         title="Delete Video"
         message="Are you sure you want to delete this video?"
         subMessage="This action cannot be undone."
+      />
+      <ThumbnailUploadModal
+        videoId={videoId}
+        open={isThumbnailOpen}
+        onOpenChange={setIsThumbnailOpen}
       />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -185,7 +197,53 @@ const FormSectionSuspence = ({ videoId }: FormSectionProps) => {
                   </FormItem>
                 )}
               />
-              {/** TODO: Add Thumbnail Field Here */}
+              <FormField
+                control={form.control}
+                name="thumbnailUrl"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Thumbnail URL</FormLabel>
+                    <FormControl>
+                      <div className="-0.5 group relative h-21 w-38.25 border border-dashed border-neutral-300">
+                        <Image
+                          fill
+                          src={video.thumbnailUrl ?? THUMBNAIL_FALLBACK}
+                          alt="Thumbnail"
+                          className="h-full w-full object-cover"
+                        />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              type="button"
+                              className="absolute top-1 right-1 size-7 rounded-full bg-black/50 opacity-100 duration-300 group-hover:opacity-100 hover:bg-black/50 md:opacity-0"
+                              size={"icon"}
+                            >
+                              <MoreVerticalIcon />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="start" side="right">
+                            <DropdownMenuItem
+                              onClick={() => setIsThumbnailOpen(true)}
+                            >
+                              <ImagePlusIcon className="mr-1 size-4" />
+                              Update
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <SparklesIcon className="mr-1 size-4" />
+                              AI Generate
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <RotateCcwIcon className="mr-1 size-4" />
+                              Restore
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="categoryId"
