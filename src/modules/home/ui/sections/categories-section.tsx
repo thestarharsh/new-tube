@@ -6,52 +6,57 @@ import { useRouter } from "next/navigation";
 
 import { trpc } from "@/trpc/client";
 import { FilterCarousel } from "@/components/filter-carousel";
+import { ErrorMessage } from "@/components/error-message";
 
 interface CategoriesSectionProps {
   categoryId?: string;
 }
 
 const CategoriesSectionSuspense = ({ categoryId }: CategoriesSectionProps) => {
-    const router = useRouter();
-    const [categories] = trpc.categories.getMany.useSuspenseQuery();
+  const router = useRouter();
+  const [categories] = trpc.categories.getMany.useSuspenseQuery();
 
-    const data = categories.map((category) => ({
-        value: category.id,
-        label: category.name,
-    }));
+  const data = categories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
 
-    const onSelect = (value: string | null) => {
-        const url = new URL(window.location.href);
-        
-        if (value) {
-            url.searchParams.set("categoryId", value);
-        } else {
-            url.searchParams.delete("categoryId");
-        }
+  const onSelect = (value: string | null) => {
+    const url = new URL(window.location.href);
 
-        router.push(url.toString());
+    if (value) {
+      url.searchParams.set("categoryId", value);
+    } else {
+      url.searchParams.delete("categoryId");
     }
 
-  return (
-      <FilterCarousel
-          value={categoryId}
-          onSelect={onSelect}
-          isLoading={false}
-          data={data}
-      />
-  );
-}
+    router.push(url.toString());
+  };
 
-const CategoriesSkeleton = () => (
-    <FilterCarousel isLoading={true} data={[]} />
-)
+  return (
+    <FilterCarousel
+      value={categoryId}
+      onSelect={onSelect}
+      isLoading={false}
+      data={data}
+    />
+  );
+};
+
+const CategoriesSkeleton = () => <FilterCarousel isLoading={true} data={[]} />;
 
 export const CategoriesSection = ({ categoryId }: CategoriesSectionProps) => {
   return (
-      <Suspense fallback={<CategoriesSkeleton />}>
-          <ErrorBoundary fallback={<p>Error loading categories...</p>}>
-            <CategoriesSectionSuspense categoryId={categoryId} />
-          </ErrorBoundary>
+    <Suspense fallback={<CategoriesSkeleton />}>
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ErrorMessage
+            message={error.message || "Failed to load categories"}
+          />
+        )}
+      >
+        <CategoriesSectionSuspense categoryId={categoryId} />
+      </ErrorBoundary>
     </Suspense>
   );
-}
+};

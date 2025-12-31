@@ -50,6 +50,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorMessage } from "@/components/error-message";
 import { videosUpdateSchema } from "@/db/schema";
 import { VideoPlayer } from "@/modules/videos/ui/components/video-player";
 
@@ -57,7 +59,7 @@ interface FormSectionProps {
   videoId: string;
 }
 
-const FormSectionSuspence = ({ videoId }: FormSectionProps) => {
+const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
   const router = useRouter();
   const utils = trpc.useUtils();
 
@@ -388,8 +390,76 @@ const FormSectionSuspence = ({ videoId }: FormSectionProps) => {
 
 const FormSectionSkeleton = () => {
   return (
-    <div className="">
-      <p>Loading video form...</p>
+    <div>
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-40" />
+          <Skeleton className="h-4 w-48" />
+        </div>
+        <div className="flex gap-x-2">
+          <Skeleton className="h-9 w-20" />
+          <Skeleton className="h-9 w-9 rounded-md" />
+        </div>
+      </div>
+
+      {/* Main grid */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        {/* Left section (form) */}
+        <div className="space-y-8 lg:col-span-3">
+          {/* Title */}
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-60 w-full" />
+          </div>
+
+          {/* Thumbnail */}
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-21 w-38.25 rounded-md" />
+          </div>
+
+          {/* Category */}
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+
+        {/* Right sidebar */}
+        <div className="flex flex-col gap-y-8 lg:col-span-2">
+          {/* Video card */}
+          <div className="overflow-hidden rounded-xl bg-[#f9f9f9]">
+            <Skeleton className="aspect-video w-full" />
+            <div className="space-y-6 p-4">
+              <div className="space-y-2">
+                <Skeleton className="h-3 w-24" />
+                <Skeleton className="h-4 w-full" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-3 w-24" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-3 w-28" />
+                <Skeleton className="h-4 w-36" />
+              </div>
+            </div>
+          </div>
+
+          {/* Visibility */}
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -397,8 +467,14 @@ const FormSectionSkeleton = () => {
 export const FormSection = ({ videoId }: FormSectionProps) => {
   return (
     <Suspense fallback={<FormSectionSkeleton />}>
-      <ErrorBoundary fallback={<p>Error loading video form...</p>}>
-        <FormSectionSuspence videoId={videoId} />
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ErrorMessage
+            message={error.message || "Failed to load video form"}
+          />
+        )}
+      >
+        <FormSectionSuspense videoId={videoId} />
       </ErrorBoundary>
     </Suspense>
   );

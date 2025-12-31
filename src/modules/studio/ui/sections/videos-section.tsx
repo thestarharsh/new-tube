@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorMessage } from "@/components/error-message";
 
 import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 
@@ -190,7 +191,11 @@ const VideosSectionSuspense = () => {
 export const VideosSection = () => {
   return (
     <Suspense fallback={<VideosSectionSkeleton />}>
-      <ErrorBoundary fallback={<p>Error loading videos...</p>}>
+      <ErrorBoundary
+        fallbackRender={({ error }) => (
+          <ErrorMessage message={error.message || "Failed to load videos"} />
+        )}
+      >
         <VideosSectionSuspense />
       </ErrorBoundary>
     </Suspense>
