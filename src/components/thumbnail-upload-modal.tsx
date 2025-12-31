@@ -1,4 +1,5 @@
 import { trpc } from "@/trpc/client";
+import { toast } from "sonner";
 import { UploadDropzone } from "@/lib/uploadthing";
 
 import { ResponsiveModal } from "./responsive-modal";
@@ -20,6 +21,7 @@ export const ThumbnailUploadModal = ({
     utils.studio.getMany.invalidate();
     utils.studio.getOne.invalidate({ videoId });
     onOpenChange(false);
+    toast.success("Thumbnail uploaded successfully");
   };
 
   return (
