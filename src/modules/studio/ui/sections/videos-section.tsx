@@ -27,7 +27,7 @@ const VideosSectionSkeleton = () => {
   return (
     <>
       <div className="border-y">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             <TableRow>
               <TableHead className="w-127.5 pl-6">Video</TableHead>
@@ -91,7 +91,7 @@ const VideosSectionSuspense = () => {
   return (
     <div>
       <div className="border-y">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             <TableRow>
               <TableHead className="w-127.5 pl-6">Video</TableHead>
@@ -166,7 +166,7 @@ const VideosSectionSuspense = () => {
                         {format(new Date(video.createdAt), "MMM d, yyyy")}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right text-sm">123</TableCell>
+                    <TableCell className="text-right text-sm">80</TableCell>
                     <TableCell className="text-right text-sm">45</TableCell>
                     <TableCell className="pr-6 text-right text-sm">
                       678

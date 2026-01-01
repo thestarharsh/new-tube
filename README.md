@@ -20,12 +20,12 @@ It uses the latest web technologies and a production-grade architecture.
 
 ## ✨ Features
 
-- Responsive modern UI  
-- Home feed with infinite scroll  
-- Watch page + video playback  
-- Video uploads (pipeline WIP)  
-- Thumbnail generation (coming soon)  
-- Auth system (coming soon)  
-- Likes, comments, subscriptions (coming soon)  
-- Creator dashboard  
+- Responsive modern UI
+- Home feed with infinite scroll
+- Watch page + video playback
+- Video uploads (pipeline WIP)
+- Thumbnail generation (coming soon)
+- Auth system (coming soon)
+- Likes, comments, subscriptions (coming soon)
+- Creator dashboard
 - Trending & categories (future)
