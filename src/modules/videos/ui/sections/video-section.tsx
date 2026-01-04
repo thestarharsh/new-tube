@@ -4,14 +4,19 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useAuth } from "@clerk/nextjs";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorMessage } from "@/components/error-message";
 import { trpc } from "@/trpc/client";
 import { cn } from "@/lib/utils";
 
-import { VideoPlayer } from "@/modules/videos/ui/components/video-player";
 import { VideoBanner } from "@/modules/videos/ui/components/video-banner";
-import { VideoTopRow } from "@/modules/videos/ui/components/video-top-row";
+import {
+  VideoPlayer,
+  VideoPlayerSkeleton,
+} from "@/modules/videos/ui/components/video-player";
+import {
+  VideoTopRow,
+  VideoTopRowSkeleton,
+} from "@/modules/videos/ui/components/video-top-row";
 
 interface VideoSectionProps {
   videoId: string;
@@ -62,9 +67,10 @@ const VideoSectionSuspense = ({ videoId }: VideoSectionProps) => {
 
 const VideosSectionSkeleton = () => {
   return (
-    <div>
-      <Skeleton />
-    </div>
+    <>
+      <VideoPlayerSkeleton />
+      <VideoTopRowSkeleton />
+    </>
   );
 };
 
