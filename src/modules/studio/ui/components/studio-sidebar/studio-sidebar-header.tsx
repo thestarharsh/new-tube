@@ -17,10 +17,10 @@ export const StudioSidebarHeader = () => {
   if (!user) {
     return (
       <SidebarHeader className="flex items-center justify-center pb-4">
-        <Skeleton className="size-[112px] rounded-full" />
+        <Skeleton className="size-28 rounded-full" />
         <div className="mt-2 flex flex-col items-center gap-y-2">
-          <Skeleton className="h-4 w-[112px]" />
-          <Skeleton className="mt-2 h-4 w-[112px]" />
+          <Skeleton className="h-4 w-28" />
+          <Skeleton className="mt-2 h-4 w-28" />
         </div>
       </SidebarHeader>
     );
@@ -49,7 +49,7 @@ export const StudioSidebarHeader = () => {
         <UserAvatar
           imageUrl={user?.imageUrl || ""}
           name={user?.fullName || "User"}
-          className="size-[112px] transition-opacity hover:opacity-80"
+          className="size-28 transition-opacity hover:opacity-80"
         />
       </Link>
       <div className="mt-2 flex flex-col items-center gap-y-1">
