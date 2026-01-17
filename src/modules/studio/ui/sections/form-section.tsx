@@ -469,9 +469,7 @@ export const FormSection = ({ videoId }: FormSectionProps) => {
     <Suspense fallback={<FormSectionSkeleton />}>
       <ErrorBoundary
         fallbackRender={({ error }) => (
-          <ErrorMessage
-            message={error.message || "Failed to load video form"}
-          />
+          <ErrorMessage message={"Failed to load video form"} />
         )}
       >
         <FormSectionSuspense videoId={videoId} />

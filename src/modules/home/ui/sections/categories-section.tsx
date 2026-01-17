@@ -50,9 +50,7 @@ export const CategoriesSection = ({ categoryId }: CategoriesSectionProps) => {
     <Suspense fallback={<CategoriesSkeleton />}>
       <ErrorBoundary
         fallbackRender={({ error }) => (
-          <ErrorMessage
-            message={error.message || "Failed to load categories"}
-          />
+          <ErrorMessage message={"Failed to load categories"} />
         )}
       >
         <CategoriesSectionSuspense categoryId={categoryId} />

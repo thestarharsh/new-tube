@@ -79,7 +79,7 @@ export const VideoSection = ({ videoId }: VideoSectionProps) => {
     <Suspense fallback={<VideosSectionSkeleton />}>
       <ErrorBoundary
         fallbackRender={({ error }) => (
-          <ErrorMessage message={error.message || "Failed to load video"} />
+          <ErrorMessage message={"Failed to load video"} />
         )}
       >
         <VideoSectionSuspense videoId={videoId} />
