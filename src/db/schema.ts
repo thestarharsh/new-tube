@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  foreignKey,
   integer,
   pgEnum,
   pgTable,
@@ -140,18 +141,31 @@ export const videoRelations = relations(videos, ({ one, many }) => ({
   comments: many(comments),
 }));
 
-export const comments = pgTable("comments", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: uuid("user_id")
-    .references(() => users.id, { onDelete: "cascade" })
-    .notNull(),
-  videoId: uuid("video_id")
-    .references(() => videos.id, { onDelete: "cascade" })
-    .notNull(),
-  comment: text("comment").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+export const comments = pgTable(
+  "comments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    parentId: uuid("parent_id"),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    videoId: uuid("video_id")
+      .references(() => videos.id, { onDelete: "cascade" })
+      .notNull(),
+    comment: text("comment").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (t) => {
+    return [
+      foreignKey({
+        name: "comments_parent_id_fkey",
+        columns: [t.parentId],
+        foreignColumns: [t.id],
+      }).onDelete("cascade"),
+    ];
+  },
+);
 
 export const commentsRelations = relations(comments, ({ one, many }) => ({
   user: one(users, {
@@ -162,7 +176,15 @@ export const commentsRelations = relations(comments, ({ one, many }) => ({
     fields: [comments.videoId],
     references: [videos.id],
   }),
-  commentReactions: many(commentReactions),
+  parent: one(comments, {
+    fields: [comments.parentId],
+    references: [comments.id],
+    relationName: "parent_replies",
+  }),
+  replies: many(comments, {
+    relationName: "parent_replies",
+  }),
+  reactions: many(commentReactions),
 }));
 
 export const commentInsertSchema = createInsertSchema(comments);
