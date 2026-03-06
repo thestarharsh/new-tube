@@ -22,15 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider afterSignOutUrl={"/"}>
-      <html lang="en">
-        <body className={`${inter.className} antialiased`}>
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>
+        <ClerkProvider afterSignOutUrl={"/"}>
           <TRPCProvider>
             <Toaster />
             {children}
           </TRPCProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
