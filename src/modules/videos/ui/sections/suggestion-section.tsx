@@ -2,26 +2,53 @@
 
 import { trpc } from "@/trpc/client";
 import { DEFAULT_LIMIT } from "@/constants";
+import { InfiniteScroll } from "@/components/infinite-scroll";
+
+import { VideoRowCard } from "../components/video-row-card";
+import { VideoGridCard } from "../components/video-grid-card";
 
 interface SuggestionSectionProps {
   videoId: string;
+  isManual?: boolean;
 }
 
-export const SuggestionSection = ({ videoId }: SuggestionSectionProps) => {
-  const [suggestions] = trpc.suggestions.getMany.useSuspenseInfiniteQuery(
-    {
-      videoId,
-      limit: DEFAULT_LIMIT,
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    },
-  );
+export const SuggestionSection = ({
+  videoId,
+  isManual,
+}: SuggestionSectionProps) => {
+  const [suggestions, query] =
+    trpc.suggestions.getMany.useSuspenseInfiniteQuery(
+      {
+        videoId,
+        limit: DEFAULT_LIMIT,
+      },
+      {
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+      },
+    );
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
-      <h2 className="text-lg font-semibold">{JSON.stringify(suggestions)}</h2>
-      <div className="grid grid-cols-2 gap-4"></div>
-    </div>
+    <>
+      <div className="hidden space-y-3 md:block">
+        {suggestions.pages.flatMap((page) =>
+          page.items.map((video) => (
+            <VideoRowCard key={video.id} data={video} size="compact" />
+          )),
+        )}
+      </div>
+      <div className="block space-y-10 md:hidden">
+        {suggestions.pages.flatMap((page) =>
+          page.items.map((video) => (
+            <VideoGridCard key={video.id} data={video} />
+          )),
+        )}
+      </div>
+      <InfiniteScroll
+        hasNextPage={query.hasNextPage}
+        isFetchingNextPage={query.isFetchingNextPage}
+        fetchNextPage={query.fetchNextPage}
+        isManual={isManual}
+      />
+    </>
   );
 };

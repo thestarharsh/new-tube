@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNowStrict } from "date-fns";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -61,7 +61,7 @@ export const VideoTopRow = ({ video }: VideoTopRowProps) => {
   }, [video.viewCount]);
 
   const compactDate = useMemo(() => {
-    return formatDistanceToNow(video.createdAt, {
+    return formatDistanceToNowStrict(video.createdAt, {
       addSuffix: true,
     });
   }, [video.createdAt]);
