@@ -103,6 +103,17 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     },
   });
 
+  const revalidate = trpc.videos.revalidate.useMutation({
+    onSuccess: () => {
+      utils.studio.getMany.invalidate();
+      utils.studio.getOne.invalidate({ videoId });
+      toast.success("Video Revalidated Successfully");
+    },
+    onError: (error) => {
+      toast.error("Video Revalidation Failed: " + error.message);
+    },
+  });
+
   const form = useForm<z.infer<typeof videosUpdateSchema>>({
     resolver: zodResolver(videosUpdateSchema),
     defaultValues: video,
@@ -164,6 +175,12 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={() => revalidate.mutate({ videoId })}
+                  >
+                    <RotateCcwIcon className="mr-2 size-4" />
+                    Revalidate
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={onDeleteVideo}>
                     <TrashIcon className="mr-2 size-4" />
                     Delete
