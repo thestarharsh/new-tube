@@ -8,13 +8,13 @@ import { SearchInput } from "./search-input";
 
 export const HomeNavbar = () => {
   return (
-    <nav className="fixed top-0 left-0 right-0 h-16 bg-white flex items-center px-2 pr-5 z-50">
-      <div className="flex items-center gap-4 w-full">
+    <nav className="fixed top-0 right-0 left-0 z-50 flex h-16 items-center bg-white px-2 pr-5">
+      <div className="flex w-full items-center gap-4">
         {/* Menu and Logo */}
-        <div className="flex items-center shrink-0">
+        <div className="flex shrink-0 items-center">
           <SidebarTrigger />
           <Link href="/">
-            <div className="p-4 flex items-center gap-1">
+            <div className="flex items-center gap-1 p-4">
               <Image
                 src="/logo.svg"
                 alt="New Tube Logo"
@@ -27,7 +27,7 @@ export const HomeNavbar = () => {
         </div>
 
         {/* Search Bar */}
-        <div className="flex1 flex justify-center max-w-180 mx-auto">
+        <div className="mx-auto flex max-w-180 flex-1 justify-center">
           <SearchInput />
         </div>
 

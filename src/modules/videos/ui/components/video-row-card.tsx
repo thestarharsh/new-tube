@@ -46,15 +46,49 @@ interface VideoRowCardProps extends VariantProps<typeof videoRowCardVariants> {
   onRemove?: () => void;
 }
 
-export const VideoRowCardSkeleton = () => {
+interface VideoRowCardSkeletonProps extends VariantProps<typeof videoRowCardVariants> {}
+
+export const VideoRowCardSkeleton = ({ size = "default" }: VideoRowCardSkeletonProps) => {
   return (
-    <div>
-      <Skeleton />
+    <div className={cn(videoRowCardVariants({ size }))}>
+      <div className={cn(thumbnailVariants({ size }))}>
+        <Skeleton className="aspect-video w-full rounded-xl" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex justify-between gap-x-2">
+          <div className="min-w-0 flex-1 space-y-2">
+            <Skeleton className={cn("h-4 w-full", size === "compact" ? "text-sm" : "text-base")} />
+            {size === "default" && (
+              <>
+                <Skeleton className="h-3 w-24" />
+                <div className="my-3 flex items-center gap-2">
+                  <Skeleton className="size-6 rounded-full" />
+                  <Skeleton className="h-3 w-20" />
+                </div>
+                <Skeleton className="h-3 w-full" />
+              </>
+            )}
+            {size === "compact" && (
+              <>
+                <Skeleton className="h-3 w-16" />
+                <Skeleton className="h-3 w-20" />
+              </>
+            )}
+          </div>
+          <div className="flex-none">
+            <Skeleton className="size-8 rounded-full" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export const VideoRowCard = ({ data, size, onRemove }: VideoRowCardProps) => {
+export const VideoRowCard = ({
+  data,
+  size = "default",
+  onRemove,
+}: VideoRowCardProps) => {
   const compactViewCount = useMemo(() => {
     return Intl.NumberFormat("en", {
       notation: "compact",

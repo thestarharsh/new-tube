@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { trpc } from "@/trpc/client";
 import { snakeCaseToTitleCase } from "@/lib/utils";
-import { THUMBNAIL_FALLBACK } from "@/constants";
+import { APP_URL, THUMBNAIL_FALLBACK } from "@/constants";
 import { Button } from "@/components/ui/button";
 import { ConfirmationModal } from "@/components/confirmation-modal";
 import { ThumbnailUploadModal } from "@/components/thumbnail-upload-modal";
@@ -127,7 +127,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     setIsConfirmOpen(true);
   };
 
-  const fullUrl = `${process.env.VERCEL_URL || "http://localhost:3000"}/videos/${videoId}`;
+  const fullUrl = `${APP_URL ? `https://${APP_URL}` : "http://localhost:3000"}/videos/${videoId}`;
 
   const onCopy = async () => {
     navigator.clipboard.writeText(fullUrl);

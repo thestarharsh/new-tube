@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { THUMBNAIL_FALLBACK } from "@/constants";
 import { formatDuration } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface VideoThumbnailProps {
   title: string;
@@ -9,6 +10,10 @@ interface VideoThumbnailProps {
   imageUrl?: string | null;
   previewUrl?: string | null;
 }
+
+export const VideoThumbnailSkeleton = () => {
+  return <Skeleton className="aspect-video w-full rounded-xl" />;
+};
 
 export const VideoThumbnail = ({
   title,

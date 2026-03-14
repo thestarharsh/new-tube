@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { UserAvatar } from "@/components/user-avatar";
 import { UserInfo } from "@/modules/users/ui/components/user-info";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { VideoMenu } from "./video-menu";
 import { VideoGetManyOutput } from "../../types";
@@ -12,6 +13,19 @@ interface VideoInfoProps {
   data: VideoGetManyOutput["items"][number];
   onRemove?: () => void;
 }
+
+export const VideoInfoSkeleton = () => {
+  return (
+    <div className="flex gap-3">
+      <Skeleton className="size-9 shrink-0 rounded-full" />
+      <div className="flex-1 space-y-2">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-4 w-1/2" />
+      </div>
+    </div>
+  );
+};
 
 export const VideoInfo = ({ data, onRemove }: VideoInfoProps) => {
   const compactViewCount = useMemo(() => {
