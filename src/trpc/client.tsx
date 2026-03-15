@@ -24,12 +24,8 @@ function getQueryClient() {
   return (clientQueryClientSingleton ??= makeQueryClient());
 }
 function getUrl() {
-  const base = (() => {
-    if (typeof window !== "undefined") return "";
-    if (APP_URL) return `https://${APP_URL}`;
-    return "http://localhost:3000";
-  })();
-  return `${base}/api/trpc`;
+  if (typeof window !== "undefined") return "/api/trpc";
+  return `${APP_URL}/api/trpc`;
 }
 export function TRPCProvider(
   props: Readonly<{

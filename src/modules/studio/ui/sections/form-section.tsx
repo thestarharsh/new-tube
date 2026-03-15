@@ -127,7 +127,7 @@ const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
     setIsConfirmOpen(true);
   };
 
-  const fullUrl = `${APP_URL ? `https://${APP_URL}` : "http://localhost:3000"}/videos/${videoId}`;
+  const fullUrl = `${APP_URL}/videos/${videoId}`;
 
   const onCopy = async () => {
     navigator.clipboard.writeText(fullUrl);
