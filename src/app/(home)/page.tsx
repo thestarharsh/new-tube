@@ -1,5 +1,6 @@
 import { HydrateClient, trpc } from "@/trpc/server";
 import { HomeView } from "@/modules/home/ui/views/home-view";
+import { DEFAULT_LIMIT } from "@/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -7,12 +8,13 @@ interface PageProps {
   searchParams: Promise<{
     categoryId?: string;
   }>;
-};
+}
 
 const Page = async ({ searchParams }: PageProps) => {
   const { categoryId } = await searchParams;
 
-   trpc.categories.getMany.prefetch();
+  trpc.categories.getMany.prefetch();
+  trpc.videos.getMany.prefetchInfinite({ categoryId, limit: DEFAULT_LIMIT });
 
   return (
     <div>
@@ -21,6 +23,6 @@ const Page = async ({ searchParams }: PageProps) => {
       </HydrateClient>
     </div>
   );
-}
+};
 
 export default Page;
