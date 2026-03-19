@@ -1,0 +1,21 @@
+import { HydrateClient, trpc } from "@/trpc/server";
+
+import { DEFAULT_LIMIT } from "@/constants";
+
+import { SubscribedView } from "@/modules/home/ui/views/subscribed-view";
+
+export const dynamic = "force-dynamic";
+
+const SubscribedPage = async () => {
+  void trpc.videos.getSubscribed.prefetchInfinite({
+    limit: DEFAULT_LIMIT,
+  });
+
+  return (
+    <HydrateClient>
+      <SubscribedView />
+    </HydrateClient>
+  );
+};
+
+export default SubscribedPage;
