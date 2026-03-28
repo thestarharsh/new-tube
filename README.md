@@ -1,4 +1,4 @@
-# 🎥 New-Tube — A Modern YouTube Clone
+# 🎥 NewTube — A Modern YouTube Clone
 Built with **Next.js 16**, **React 19**, **TailwindCSS**, **Drizzle ORM**, and **tRPC**
 
 NewTube is a full-stack video-sharing platform inspired by YouTube.
