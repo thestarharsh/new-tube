@@ -3,6 +3,8 @@ import { DEFAULT_LIMIT } from "@/constants";
 
 import { HistoryView } from "@/modules/playlists/ui/views/history-view";
 
+export const dynamic = "force-dynamic";
+
 const HistoryPage = async () => {
   void trpc.playlists.getHistory.prefetchInfinite({ limit: DEFAULT_LIMIT });
 

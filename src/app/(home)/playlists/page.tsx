@@ -5,6 +5,8 @@ import { PlaylistsView } from "@/modules/playlists/ui/views/playlists-view";
 
 interface PlaylistsPageProps {}
 
+export const dynamic = "force-dynamic";
+
 const PlaylistsPage = async ({}: PlaylistsPageProps) => {
   void trpc.playlists.getMany.prefetchInfinite({
     limit: DEFAULT_LIMIT,
