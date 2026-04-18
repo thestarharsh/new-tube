@@ -1,13 +1,14 @@
+import Mux from "@mux/mux-node";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { UTApi } from "uploadthing/server";
-import {
-  VideoAssetCreatedWebhookEvent,
-  VideoAssetDeletedWebhookEvent,
-  VideoAssetErroredWebhookEvent,
-  VideoAssetReadyWebhookEvent,
-  VideoAssetTrackReadyWebhookEvent,
-} from "@mux/mux-node/resources/webhooks";
+
+type VideoAssetCreatedWebhookEvent = Mux.Webhooks.VideoAssetCreatedWebhookEvent;
+type VideoAssetDeletedWebhookEvent = Mux.Webhooks.VideoAssetDeletedWebhookEvent;
+type VideoAssetErroredWebhookEvent = Mux.Webhooks.VideoAssetErroredWebhookEvent;
+type VideoAssetReadyWebhookEvent = Mux.Webhooks.VideoAssetReadyWebhookEvent;
+type VideoAssetTrackReadyWebhookEvent =
+  Mux.Webhooks.VideoAssetTrackReadyWebhookEvent;
 
 import { db } from "@/db";
 import { videos } from "@/db/schema";
@@ -31,7 +32,7 @@ export const POST = async (req: Request) => {
   const muxSignature = headersPayload.get("mux-signature");
 
   if (!muxSignature) {
-    throw new Response("No Signature is found", { status: 401 });
+    return new Response("No Signature is found", { status: 401 });
   }
 
   const payload = await req.json();
