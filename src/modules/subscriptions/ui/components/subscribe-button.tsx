@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface SubscribeButtonProps {
-  onClick: () => void;
+  onClick: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
   disabled?: boolean;
   isSubscribed: boolean;
