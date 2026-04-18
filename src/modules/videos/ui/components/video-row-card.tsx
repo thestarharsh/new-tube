@@ -46,9 +46,13 @@ interface VideoRowCardProps extends VariantProps<typeof videoRowCardVariants> {
   onRemove?: () => void;
 }
 
-interface VideoRowCardSkeletonProps extends VariantProps<typeof videoRowCardVariants> {}
+interface VideoRowCardSkeletonProps extends VariantProps<
+  typeof videoRowCardVariants
+> {}
 
-export const VideoRowCardSkeleton = ({ size = "default" }: VideoRowCardSkeletonProps) => {
+export const VideoRowCardSkeleton = ({
+  size = "default",
+}: VideoRowCardSkeletonProps) => {
   return (
     <div className={cn(videoRowCardVariants({ size }))}>
       <div className={cn(thumbnailVariants({ size }))}>
@@ -57,7 +61,12 @@ export const VideoRowCardSkeleton = ({ size = "default" }: VideoRowCardSkeletonP
       <div className="min-w-0 flex-1">
         <div className="flex justify-between gap-x-2">
           <div className="min-w-0 flex-1 space-y-2">
-            <Skeleton className={cn("h-4 w-full", size === "compact" ? "text-sm" : "text-base")} />
+            <Skeleton
+              className={cn(
+                "h-4 w-full",
+                size === "compact" ? "text-sm" : "text-base",
+              )}
+            />
             {size === "default" && (
               <>
                 <Skeleton className="h-3 w-24" />
@@ -110,6 +119,7 @@ export const VideoRowCard = ({
   return (
     <div className={cn(videoRowCardVariants({ size }))}>
       <Link
+        prefetch
         href={`/videos/${data.id}`}
         className={cn(thumbnailVariants({ size }))}
       >
@@ -123,7 +133,7 @@ export const VideoRowCard = ({
 
       <div className="min-w-0 flex-1">
         <div className="flex justify-between gap-x-2">
-          <Link href={`/videos/${data.id}`} className="min-w-0 flex-1">
+          <Link prefetch href={`/videos/${data.id}`} className="min-w-0 flex-1">
             <h3
               className={cn(
                 "line-clamp-2 font-medium",
