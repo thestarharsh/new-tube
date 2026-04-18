@@ -31,7 +31,7 @@ export const UserPageInfoSkeleton = () => {
 
       {/* Desktop Layout */}
       <div className="hidden items-start gap-4 md:flex">
-        <Skeleton className="size-[160px] shrink-0 rounded-full" />
+        <Skeleton className="size-40 shrink-0 rounded-full" />
         <div className="min-w-0 flex-1 space-y-3">
           <Skeleton className="h-9 w-48" />
           <Skeleton className="h-4 w-56" />
