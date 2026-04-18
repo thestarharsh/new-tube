@@ -26,8 +26,8 @@ import { VideoThumbnail } from "@/modules/videos/ui/components/video-thumbnail";
 const VideosSectionSkeleton = () => {
   return (
     <>
-      <div className="border-y">
-        <Table className="table-fixed">
+      <div className="overflow-x-auto border-y">
+        <Table className="min-w-175">
           <TableHeader>
             <TableRow>
               <TableHead className="w-127.5 pl-6">Video</TableHead>
@@ -90,8 +90,8 @@ const VideosSectionSuspense = () => {
 
   return (
     <div>
-      <div className="border-y">
-        <Table className="table-fixed">
+      <div className="overflow-x-auto border-y">
+        <Table className="min-w-175">
           <TableHeader>
             <TableRow>
               <TableHead className="w-127.5 pl-6">Video</TableHead>
